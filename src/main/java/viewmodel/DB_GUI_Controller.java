@@ -42,9 +42,27 @@ public class DB_GUI_Controller implements Initializable {
     @FXML
     private TableColumn<Person, String> tv_fn, tv_ln, tv_department, tv_major, tv_email;
     @FXML
-    private Button editButtonFaded;
+    private Button editDisabled, deleteDisabled, addDisabled;
     private final DbConnectivityClass cnUtil = new DbConnectivityClass();
     private final ObservableList<Person> data = cnUtil.getData();
+
+    private final String firstNameRegex; {
+        firstNameRegex = "[a-zA-Z]{2,25}";
+    }
+    private final String lastNameRegex; {
+        lastNameRegex = "[a-zA-Z]{2,35}";
+    }
+    private final String emailRegex; {
+        emailRegex = "^(.+)@(.+)$*";
+    }
+    private final String departmentRegex; {
+        departmentRegex = "[a-zA-Z0-9]{2,35}";
+    }
+    private final String majorRegex; {
+        majorRegex = "[a-zA-Z0-9]{2,35}";
+    }
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -56,8 +74,57 @@ public class DB_GUI_Controller implements Initializable {
             tv_major.setCellValueFactory(new PropertyValueFactory<>("major"));
             tv_email.setCellValueFactory(new PropertyValueFactory<>("email"));
             tv.setItems(data);
+
+            tv.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 1) {
+                    editExistingRecord();
+                }
+            });
+
+            editDisabled.setDisable(true);
+            deleteDisabled.setDisable(true);
+            addDisabled.setDisable(true);
+
+            validationListener(first_name, firstNameRegex);
+            validationListener(last_name, lastNameRegex);
+            validationListener(email, emailRegex);
+            validationListener(department, departmentRegex);
+            validationListener(major, majorRegex);
+
+            tv.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
+                deleteDisabled.setDisable(newSelection == null);
+                editDisabled.setDisable(newSelection == null);
+            });
+
+
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+    private void validateUserInfo(TextField textField, String regex) {
+        if (!textField.getText().matches(regex)) {
+                textField.setStyle("-fx-border-color: red; -fx-border-width: 4px ;");
+                addDisabled.setDisable(false);
+            }
+            else {
+                textField.setStyle("-fx-border-color: blue; -fx-border-width: 4px ;");
+            }
+        }
+    private void validationListener(TextField textField, String regex) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            validateUserInfo(textField, regex);
+        });
+    }
+    private void editExistingRecord() {
+        Person selectedRecord = tv.getSelectionModel().getSelectedItem();
+
+        if (selectedRecord != null) {
+            first_name.setText(selectedRecord.getFirstName());
+            last_name.setText(selectedRecord.getLastName());
+            department.setText(selectedRecord.getDepartment());
+            major.setText(selectedRecord.getMajor());
+            email.setText(selectedRecord.getEmail());
+            //imageURL.setText(selectedRecord.getImageURL());
         }
     }
 
@@ -127,6 +194,7 @@ public class DB_GUI_Controller implements Initializable {
         data.add(index, p2);
         tv.getSelectionModel().select(index);
     }
+
 
     @FXML
     protected void deleteRecord() {
@@ -216,7 +284,7 @@ public class DB_GUI_Controller implements Initializable {
         });
     }
 
-    private static enum Major {Business, CSC, CPIS}
+    private enum Major {Business, CSC, CPIS}
 
     private static class Results {
 

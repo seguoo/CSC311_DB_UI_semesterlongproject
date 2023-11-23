@@ -114,17 +114,17 @@
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </VBox.margin>
                         </Button>
-                        <Button fx:id="addBtn" mnemonicParsing="false" onAction="#addNewRecord" styleClass="db_btn" text="Add">
+                        <Button fx:id="addDisabled" mnemonicParsing="false" onAction="#addNewRecord" styleClass="db_btn" text="Add">
                             <VBox.margin>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </VBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#deleteRecord" styleClass="db_btn" text="Delete">
+                        <Button fx:id="deleteDisabled" mnemonicParsing="false" onAction="#deleteRecord" styleClass="db_btn" text="Delete">
                             <VBox.margin>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </VBox.margin>
                         </Button>
-                        <Button fx:id="editButtonFaded" mnemonicParsing="false" onAction="#editRecord" styleClass="db_btn" text="Edit">
+                        <Button fx:id="editDisabled" mnemonicParsing="false" onAction="#editRecord" styleClass="db_btn" text="Edit">
                             <VBox.margin>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </VBox.margin>
