@@ -43,6 +43,11 @@ public class DB_GUI_Controller implements Initializable {
     private TableColumn<Person, String> tv_fn, tv_ln, tv_department, tv_major, tv_email;
     @FXML
     private Button editDisabled, deleteDisabled, addDisabled;
+    @FXML
+    private ChoiceBox<String> majorChoiceBox;
+    private String[] majorTypes = {"English", "CS", "CPIS","History",
+                                   "Math","Psychology",
+                                   "Engineering", "Business"};
     private final DbConnectivityClass cnUtil = new DbConnectivityClass();
     private final ObservableList<Person> data = cnUtil.getData();
 
@@ -100,6 +105,14 @@ public class DB_GUI_Controller implements Initializable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        majorChoiceBox.getItems().addAll(majorTypes);
+        majorChoiceBox.setOnAction(this::getMajor);
+    }
+
+    public void getMajor(ActionEvent event) {
+        String myMajor = majorChoiceBox.getValue();
+        major.setText(myMajor);
     }
     private void validateUserInfo(TextField textField, String regex) {
         if (!textField.getText().matches(regex)) {
